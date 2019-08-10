@@ -20,10 +20,10 @@ application = web.Application([
     (r"/", handlers.HomeHandler),
     (r"/data/upload", handlers.DataUploadHandler),
     (r"/static", web.StaticFileHandler, {"path": settingmain.APP_STATIC})
-])
+], **settings)
 
 if __name__ == "__main__":
-    server = httpserver.HTTPServer(application)
+    server = httpserver.HTTPServer(application, max_buffer_size=10000000000, max_body_size=100000000000)
     server.listen(options.p)
     ioloop.IOLoop.instance().start()
 
