@@ -1,1 +1,0 @@
-Color	Description"1,6,#86d5e3;"	Conserved start region#ebb03b	CAAACCAAG"1,9,#796dc9;"	AAACTAAGA#bcc0c4	CGATACAAGGGATTT#4ecc9e	ATG	
