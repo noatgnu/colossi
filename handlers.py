@@ -87,9 +87,9 @@ class DataUploadHandler(BaseHandler):
         print(setting)
         setting = escape.json_decode(setting)
 
-        result = {"user_result": [], "compare_dataframe": []}
+        result = {"userResult": [], "compareDataframe": []}
         out = os.path.join(folder, "out_" + filename)
         subprocess.run([settingmain.Rscript, '--vanilla', settingmain.R_script_to_be_execute, os.path.join(folder, filename), out], shell=True)
-        result_data = pd.read_csv(out, sep="\t")
-        result["user_result"] = result_data.to_json(orient='records')
+        result_data = pd.read_csv(out, sep=" ")
+        result["summaryStats"] = result_data.to_dict(orient="records")
         self.write(result)
