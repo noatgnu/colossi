@@ -9,7 +9,8 @@ import subprocess
 from typing import Optional, Awaitable
 import pandas as pd
 from tornado import web, ioloop, escape
-
+from model import prediction_with_model
+import numpy as np
 conn = sqlite3.connect("./colossi.db")
 c = conn.cursor()
 
@@ -90,8 +91,12 @@ class DataUploadHandler(BaseHandler):
         result = {"userResult": [], "compareDataframe": []}
         out = os.path.join(folder, "out_" + filename)
         subprocess.run([settingmain.Rscript, '--vanilla', settingmain.R_script_to_be_execute, os.path.join(folder, filename), out], shell=True)
-        result_data = pd.read_csv(out, sep=" ")
+        result_data = pd.read_csv(out, " ")
         compare_df = pd.read_csv(r"C:\Users\Toan\Documents\GitHub\colossi\bulk_output.csv")
         result["summaryStats"] = result_data.to_dict(orient="records")
         result["compareDataframe"] = compare_df.to_dict()
+        data = np.array([result_data['Freq'].to_list()])
+        if len(result_data.index) == 6:
+            data = np.array([result_data['Freq'].to_list() + [0, 1800]])
+        result["prediction"] = prediction_with_model(data).item()
         self.write(result)
